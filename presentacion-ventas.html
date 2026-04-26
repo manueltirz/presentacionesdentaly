@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dentaly — Sistema de Marketing Dental</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#2563EB;--blue-light:#3B82F6;--blue-dark:#1D4ED8;
+  --black:#0A0A0A;--gray:#6B7280;--gray-light:#F3F4F6;
+  --white:#FFFFFF;--navy:#0F172A;
+}
+html,body{width:100%;height:100%;font-family:'Inter',sans-serif;background:#111;overflow:hidden;color:var(--black);}
+
+/* ── SLIDES ── */
+.slides-wrapper{width:100vw;height:100vh;position:relative;overflow:hidden;}
+.slide{
+  position:absolute;inset:0;width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:translateX(60px);
+  transition:opacity .45s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;padding:56px 80px;overflow:hidden;
+}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all;}
+.slide.exit{opacity:0;transform:translateX(-60px);pointer-events:none;}
+
+/* backgrounds */
+.bg-white{background:#fff;}
+.bg-gray{background:#F8FAFC;}
+.bg-blue{background:var(--blue);}
+.bg-dark{background:var(--navy);}
+.bg-black{background:var(--black);}
+
+/* ── PROGRESS ── */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--blue);transition:width .4s cubic-bezier(.4,0,.2,1);z-index:200;}
+
+/* ── NAV ── */
+.nav{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:12px;z-index:100;
+  background:rgba(15,23,42,.85);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:8px 18px;
+}
+.nav-btn{
+  width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.12);color:#fff;font-size:15px;
+  transition:background .2s;
+}
+.nav-btn:hover{background:rgba(255,255,255,.25);}
+.nav-counter{font-size:13px;font-weight:600;color:rgba(255,255,255,.75);min-width:48px;text-align:center;}
+
+/* ── LOGO ── */
+.logo-d{
+  width:52px;height:52px;background:var(--blue);border-radius:13px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.logo-d-lg{width:72px;height:72px;background:var(--blue);border-radius:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-row{display:flex;align-items:center;gap:14px;}
+.logo-name{font-size:30px;font-weight:900;letter-spacing:-1px;color:var(--black);}
+.logo-name.white{color:#fff;}
+.logo-sub{font-size:13px;font-weight:400;color:var(--gray);letter-spacing:0;}
+
+/* corner logo */
+.corner{position:absolute;bottom:26px;right:32px;display:flex;align-items:center;gap:8px;opacity:.35;}
+.corner-d{width:28px;height:28px;background:var(--blue);border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.corner-name{font-size:13px;font-weight:700;}
+
+/* ── TYPOGRAPHY ── */
+.label{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);}
+.label.white{color:rgba(255,255,255,.55);}
+h1{font-size:clamp(40px,5.5vw,76px);font-weight:900;line-height:1.04;letter-spacing:-2.5px;}
+h2{font-size:clamp(34px,4.5vw,60px);font-weight:900;line-height:1.07;letter-spacing:-2px;}
+h3{font-size:clamp(26px,3vw,42px);font-weight:800;line-height:1.1;letter-spacing:-1.5px;}
+.accent{color:var(--blue);}
+.white-text{color:#fff !important;}
+p.body{font-size:17px;line-height:1.7;color:var(--gray);}
+p.body strong{color:var(--black);font-weight:700;}
+
+/* ── LAYOUT ── */
+.slide-inner{display:flex;flex-direction:column;gap:24px;width:100%;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;width:100%;max-width:1100px;}
+.col{display:flex;flex-direction:column;gap:20px;}
+.centered{display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px;max-width:800px;}
+
+/* ── PORTADA ── */
+.portada-wrap{display:flex;flex-direction:column;gap:40px;max-width:900px;width:100%;}
+.portada-h{font-size:clamp(52px,6.5vw,88px);font-weight:900;line-height:1.02;letter-spacing:-3px;color:var(--black);}
+.portada-sub{font-size:19px;color:var(--gray);line-height:1.65;max-width:560px;}
+.team-row{display:flex;align-items:center;gap:18px;}
+.avatar-stack{display:flex;}
+.av{
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue-light),var(--blue-dark));
+  border:3px solid #fff;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;color:#fff;margin-left:-14px;flex-shrink:0;
+}
+.av:first-child{margin-left:0;}
+.team-names{font-size:15px;font-weight:700;color:var(--black);}
+.team-role{font-size:13px;color:var(--gray);margin-top:2px;}
+.partners-row{display:flex;gap:12px;flex-wrap:wrap;}
+.partner-pill{padding:7px 14px;background:var(--gray-light);border-radius:8px;font-size:12px;font-weight:600;color:var(--gray);}
+
+/* ── SOBRE NOSOTROS ── */
+.nosotros-photo{
+  border-radius:20px;background:#E8F0FE;
+  min-height:320px;display:flex;align-items:flex-end;
+  overflow:hidden;position:relative;
+}
+.nosotros-stat{
+  position:absolute;bottom:20px;left:20px;right:20px;
+  background:#fff;border-radius:14px;padding:16px 18px;
+  box-shadow:0 4px 24px rgba(0,0,0,.12);
+}
+.nosotros-stat-num{font-size:26px;font-weight:900;letter-spacing:-1px;color:var(--black);}
+.nosotros-stat-label{font-size:12px;color:var(--gray);margin-top:2px;}
+.photo-placeholder{
+  width:100%;height:100%;min-height:360px;
+  background:linear-gradient(135deg,#DBEAFE,#EFF6FF);
+  border-radius:20px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;
+  border:2px dashed #93C5FD;
+}
+.photo-ph-icon{font-size:40px;}
+.photo-ph-label{font-size:13px;font-weight:600;color:#93C5FD;text-align:center;padding:0 16px;}
+.real-img{width:100%;height:100%;object-fit:cover;border-radius:16px;display:block;min-height:200px;}
+.real-img-fixed{width:100%;object-fit:cover;border-radius:16px;display:block;}
+.caso-video{width:100%;border-radius:16px;display:block;object-fit:cover;max-height:340px;background:#0F172A;}
+.img-wrap{border-radius:16px;overflow:hidden;width:100%;}
+.feat-layout.reverse{flex-direction:row-reverse;}
+/* Imágenes casos — siempre enteras, sin cortar */
+.caso-img{width:100%;height:auto;object-fit:contain;border-radius:16px;display:block;background:#F8FAFC;}
+.caso-img-md{max-height:210px;}
+.caso-img-sm{max-height:155px;}
+
+/* ── STAT CARDS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%;max-width:860px;}
+.stat-card{background:#fff;border:1px solid #E5E7EB;border-radius:20px;padding:28px 24px;}
+.stat-num{font-size:clamp(28px,3.5vw,46px);font-weight:900;letter-spacing:-2px;color:var(--blue);line-height:1;}
+.stat-lbl{font-size:14px;font-weight:500;color:var(--gray);margin-top:8px;}
+.stat-sub{font-size:12px;color:#9CA3AF;margin-top:4px;}
+
+/* ── QUÉ ES DENTALY ── */
+.qdentaly-wrap{display:flex;flex-direction:column;gap:32px;max-width:860px;width:100%;}
+.qdentaly-h{font-size:clamp(48px,7vw,96px);font-weight:900;line-height:1.02;letter-spacing:-4px;}
+.qdentaly-desc{font-size:19px;color:rgba(255,255,255,.65);max-width:600px;line-height:1.65;}
+.pills-row{display:flex;flex-wrap:wrap;gap:10px;}
+.pill{padding:9px 18px;border-radius:100px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;}
+.pill-white{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);}
+
+/* ── FEATURE LAYOUT ── */
+.feat-layout{display:flex;gap:72px;align-items:center;width:100%;max-width:1100px;}
+.feat-layout>*{flex:1;min-width:0;}
+.feat-col{display:flex;flex-direction:column;gap:22px;}
+.feat-icon{width:60px;height:60px;background:#EFF6FF;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;}
+.feat-list{display:flex;flex-direction:column;gap:12px;margin-top:4px;}
+.feat-item{display:flex;align-items:flex-start;gap:12px;}
+.feat-check{width:22px;height:22px;border-radius:50%;background:#DCFCE7;color:#16A34A;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:2px;}
+.feat-text{font-size:15px;color:var(--black);font-weight:500;line-height:1.5;}
+
+/* ── GHL MOCKUP ── */
+.ghl-window{
+  background:#fff;border:1px solid #E5E7EB;border-radius:16px;
+  overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.08);
+}
+.ghl-titlebar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:#F8FAFC;border-bottom:1px solid #E5E7EB;}
+.ghl-dot{width:10px;height:10px;border-radius:50%;}
+.ghl-url{flex:1;background:#fff;border:1px solid #E5E7EB;border-radius:6px;padding:4px 10px;font-size:11px;color:var(--gray);margin:0 8px;}
+.ghl-body{display:flex;min-height:280px;}
+.ghl-sidebar{width:48px;background:#1a1d23;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:8px;flex-shrink:0;}
+.ghl-side-icon{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;}
+.ghl-side-icon.active-icon{background:var(--blue);}
+.ghl-content{flex:1;padding:16px;overflow:hidden;}
+
+/* ── EMBUDOS ── */
+.funnel-list{display:flex;flex-direction:column;gap:10px;}
+.funnel-row{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:14px 18px;}
+.funnel-name{font-size:14px;font-weight:700;color:var(--black);}
+.funnel-steps{font-size:12px;color:var(--gray);margin-top:2px;}
+.badge-green{background:#DCFCE7;color:#16A34A;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:700;}
+
+/* ── WORKFLOW ── */
+.wf-timeline{display:flex;flex-direction:column;gap:0;position:relative;}
+.wf-step{display:flex;align-items:flex-start;gap:16px;padding:14px 0;position:relative;}
+.wf-step:not(:last-child)::after{content:'';position:absolute;left:18px;top:52px;bottom:0;width:2px;background:#E5E7EB;}
+.wf-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;z-index:1;}
+.wf-circle.blue{background:var(--blue);color:#fff;}
+.wf-circle.green{background:#16A34A;color:#fff;}
+.wf-title{font-size:15px;font-weight:700;color:var(--black);line-height:1.2;}
+.wf-channels{display:flex;gap:8px;margin-top:6px;}
+.wf-ch{padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;}
+.wf-ch.email{background:#EFF6FF;color:var(--blue);}
+.wf-ch.wa{background:#DCFCE7;color:#16A34A;}
+.wf-desc{font-size:13px;color:var(--gray);margin-top:4px;}
+
+/* ── RESEÑAS MOCKUP ── */
+.resenas-page{background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:28px 24px;display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;}
+.resenas-title{font-size:20px;font-weight:800;color:var(--black);}
+.resenas-sub{font-size:13px;color:var(--gray);max-width:280px;line-height:1.5;}
+.resenas-btn-pos{background:#16A34A;color:#fff;border-radius:12px;padding:14px 20px;font-size:14px;font-weight:700;width:100%;border:none;cursor:pointer;}
+.resenas-btn-neg{background:#fff;color:var(--gray);border:2px solid #E5E7EB;border-radius:12px;padding:14px 20px;font-size:14px;font-weight:600;width:100%;cursor:pointer;}
+.resenas-info{background:#FEF3C7;border-radius:10px;padding:12px 16px;width:100%;text-align:left;}
+
+/* ── AVATAR VIDEO ── */
+.video-player{
+  position:relative;border-radius:16px;overflow:hidden;
+  background:#0F172A;min-height:300px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.video-player video{width:100%;border-radius:16px;display:block;}
+.video-overlay{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(37,99,235,.3),rgba(15,23,42,.6));
+}
+.play-btn{
+  width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.95);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+}
+.play-btn::after{content:'';width:0;height:0;border-style:solid;border-width:12px 0 12px 22px;border-color:transparent transparent transparent var(--blue);margin-left:4px;}
+.video-placeholder-label{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:rgba(255,255,255,.6);font-size:12px;}
+
+/* ── CASO CARDS ── */
+.caso-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;width:100%;max-width:1100px;}
+.caso-photo-area{display:flex;flex-direction:column;gap:14px;}
+.caso-photo{border-radius:16px;overflow:hidden;position:relative;}
+.caso-photo-ph{
+  width:100%;min-height:280px;border-radius:16px;
+  background:linear-gradient(135deg,#DBEAFE,#EFF6FF);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:8px;border:2px dashed #93C5FD;
+}
+.caso-photo-ph-sm{min-height:160px;}
+.caso-photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.caso-text-area{display:flex;flex-direction:column;gap:16px;}
+.caso-result-num{font-size:clamp(40px,5vw,68px);font-weight:900;letter-spacing:-2.5px;color:var(--blue);line-height:1;}
+.caso-result-lbl{font-size:clamp(26px,3vw,38px);font-weight:900;letter-spacing:-1.5px;color:var(--black);line-height:1.1;}
+.caso-time{font-size:17px;color:var(--gray);font-weight:500;}
+.caso-name-tag{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:#EFF6FF;border-radius:100px;font-size:14px;font-weight:700;color:var(--blue);}
+
+/* ── CALCULADORA ── */
+.calc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%;max-width:960px;}
+.calc-card{background:#fff;border:1px solid #E5E7EB;border-radius:20px;padding:28px 22px;display:flex;flex-direction:column;gap:16px;}
+.calc-card.featured{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.08);}
+.calc-badge{background:var(--blue);color:#fff;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;align-self:flex-start;}
+.calc-inv{font-size:28px;font-weight:900;letter-spacing:-1px;color:var(--black);}
+.calc-div{height:1px;background:#F3F4F6;}
+.calc-row{display:flex;justify-content:space-between;}
+.calc-rl{font-size:13px;color:var(--gray);}
+.calc-rv{font-size:13px;font-weight:700;color:var(--black);}
+.calc-fact{font-size:32px;font-weight:900;letter-spacing:-1.5px;color:var(--blue);}
+.calc-roas{font-size:12px;color:var(--gray);margin-top:2px;}
+
+/* ── PRECIO TABLE ── */
+.precio-table{width:100%;border-radius:16px;overflow:hidden;border:1px solid #E5E7EB;}
+.precio-thead{display:grid;grid-template-columns:2.2fr 1.2fr 1.3fr;background:#F8FAFC;border-bottom:1px solid #E5E7EB;}
+.precio-th{padding:13px 18px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);}
+.precio-th.blue-th{background:var(--blue);color:#fff;}
+.precio-tr{display:grid;grid-template-columns:2.2fr 1.2fr 1.3fr;border-bottom:1px solid #F3F4F6;background:#fff;}
+.precio-tr:last-child{border-bottom:none;}
+/* Variante sin columna Dentaly */
+.precio-table.dos-col .precio-thead{grid-template-columns:1.7fr 1fr;}
+.precio-table.dos-col .precio-tr{grid-template-columns:1.7fr 1fr;}
+.precio-table.tres-col .precio-thead{grid-template-columns:1.4fr 1.3fr 1fr;}
+.precio-table.tres-col .precio-tr{grid-template-columns:1.4fr 1.3fr 1fr;}
+.precio-td{padding:12px 18px;font-size:13px;color:var(--black);display:flex;align-items:center;gap:6px;}
+.precio-td.other{color:var(--gray);}
+.precio-td.dentaly{background:rgba(37,99,235,.04);font-weight:700;color:var(--blue);}
+.precio-td.exclusive{background:rgba(37,99,235,.04);font-weight:700;}
+.precio-total-row{display:grid;grid-template-columns:2.2fr 1.2fr 1.3fr;}
+.precio-total-cell{padding:16px 18px;display:flex;align-items:center;gap:8px;font-weight:800;}
+.precio-total-cell.gray-cell{background:#F3F4F6;font-size:22px;color:var(--gray);text-decoration:line-through;}
+.precio-total-cell.blue-cell{background:var(--blue);font-size:22px;color:#fff;flex-direction:column;align-items:flex-start;gap:4px;}
+.precio-total-cell.label-cell{background:#F3F4F6;font-size:13px;color:var(--gray);}
+.precio-save{background:rgba(255,255,255,.25);color:#fff;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;}
+
+/* ── PRECIO FINAL ── */
+.precio-final-wrap{display:flex;flex-direction:column;gap:28px;max-width:680px;width:100%;}
+.price-big{font-size:clamp(64px,9vw,120px);font-weight:900;letter-spacing:-4px;line-height:1;color:#fff;}
+.price-period{font-size:22px;font-weight:600;color:rgba(255,255,255,.5);margin-left:8px;}
+.price-box{border-radius:20px;padding:24px 28px;display:flex;align-items:center;gap:20px;}
+.price-box.old{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);}
+.price-box.new{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);}
+.price-box-num{font-size:clamp(36px,4vw,52px);font-weight:900;letter-spacing:-2px;}
+.price-box-label{font-size:13px;font-weight:600;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.07em;}
+.anual-badge{background:#DCFCE7;color:#16A34A;padding:6px 14px;border-radius:100px;font-size:12px;font-weight:700;}
+
+/* ── CTA ── */
+.cta-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;gap:32px;max-width:720px;}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:18px 40px;background:#fff;color:var(--blue);
+  border-radius:100px;font-size:17px;font-weight:800;
+  text-decoration:none;box-shadow:0 4px 24px rgba(0,0,0,.15);
+  transition:transform .2s,box-shadow .2s;border:none;cursor:pointer;
+}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.2);}
+
+/* ── ANIMATIONS ── */
+.slide.active .au{animation:fadeUp .5s cubic-bezier(.4,0,.2,1) both;}
+.slide.active .au:nth-child(1){animation-delay:.04s;}
+.slide.active .au:nth-child(2){animation-delay:.09s;}
+.slide.active .au:nth-child(3){animation-delay:.14s;}
+.slide.active .au:nth-child(4){animation-delay:.19s;}
+.slide.active .au:nth-child(5){animation-delay:.24s;}
+.slide.active .au:nth-child(6){animation-delay:.29s;}
+.slide.active .au:nth-child(7){animation-delay:.34s;}
+.slide.active .au:nth-child(8){animation-delay:.39s;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .slide{padding:40px 32px 80px;}
+  .two-col,.caso-layout{grid-template-columns:1fr;gap:32px;}
+  .feat-layout{flex-direction:column;gap:32px;}
+  .feat-layout.reverse{flex-direction:column;}
+  .stat-grid{grid-template-columns:1fr 1fr;gap:14px;}
+  .calc-grid{grid-template-columns:1fr;gap:16px;}
+  .caso-photo-area{display:none;}
+  .precio-table{font-size:12px;}
+  .precio-thead,.precio-tr,.precio-total-row{grid-template-columns:1.8fr 1fr 1.1fr;}
+  h1{font-size:clamp(34px,5vw,56px);}
+  h2{font-size:clamp(28px,4.5vw,46px);}
+  .portada-h{font-size:clamp(38px,5.5vw,60px);}
+  .feat-layout .feat-col:last-child{display:none;}
+  .qdentaly-h{font-size:clamp(40px,7vw,72px);}
+  .price-big{font-size:clamp(52px,9vw,88px);}
+  .caso-result-num{font-size:clamp(36px,6vw,56px);}
+  .caso-result-lbl{font-size:clamp(22px,3.5vw,32px);}
+}
+@media(max-width:600px){
+  .slide{padding:32px 20px 72px;}
+  .stat-grid{grid-template-columns:1fr;}
+  .nav{padding:8px 14px;}
+  .price-big{font-size:clamp(44px,10vw,72px);}
+  .calc-grid .calc-card:not(.featured){display:none;}
+  .precio-thead,.precio-tr,.precio-total-row{grid-template-columns:1.5fr 0 1fr;}
+  .precio-th:nth-child(2),.precio-td.other,.precio-total-cell.label-cell{display:none;}
+  .pills-row{gap:8px;}
+  .pill{font-size:13px;padding:7px 14px;}
+  .partners-row{gap:8px;}
+  .partner-pill{font-size:11px;padding:5px 10px;}
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="pb"></div>
+<div class="slides-wrapper" id="sw">
+
+<!-- ════════════════════════════════════════
+  SLIDE 1 — PORTADA
+════════════════════════════════════════ -->
+<div class="slide bg-white active" data-slide="1">
+  <div class="portada-wrap">
+
+    <div class="au logo-row">
+      <div class="logo-d">
+        <svg width="30" height="30" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg>
+      </div>
+      <div>
+        <div class="logo-name">Dentaly</div>
+        <div class="logo-sub">by Consiguepacientes</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label au" style="margin-bottom:14px;">Propuesta de Colaboración</div>
+      <h1 class="portada-h au">El sistema de<br/><span class="accent">marketing dental</span><br/>todo en uno.</h1>
+    </div>
+
+    <div class="team-row au">
+      <div class="avatar-stack">
+        <div class="av" style="background:linear-gradient(135deg,#60A5FA,#2563EB);">JC</div>
+        <div class="av" style="background:linear-gradient(135deg,#34D399,#059669);">MT</div>
+      </div>
+      <div>
+        <div class="team-names">Josep Cid &amp; Manuel Tirado</div>
+        <div class="team-role">Cofundadores de Dentaly</div>
+      </div>
+    </div>
+
+    <div class="partners-row au">
+      <div class="partner-pill">Google Partner</div>
+      <div class="partner-pill">Meta Business Partner</div>
+      <div class="partner-pill">Shopify Partners</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 2 — SOBRE NOSOTROS
+════════════════════════════════════════ -->
+<div class="slide bg-white" data-slide="2">
+  <div class="two-col">
+    <div class="col">
+      <div class="label au">Sobre Nosotros</div>
+      <h2 class="au">Sobre <span class="accent">Nosotros</span></h2>
+      <p class="body au">Dentaly nació en una clínica, no en una oficina.</p>
+      <p class="body au">Todo empezó cuando Josep ayudó a digitalizar la de un amigo: en seis meses <strong>triplicaron la facturación</strong>.</p>
+      <p class="body au">Hoy, junto a Manuel, lideran un sistema centrado en resultados reales: <strong>pacientes, no solo clics</strong>. Miden cada euro, optimizan lo que funciona y escalan con criterio.</p>
+      <p class="body au">Trabajan con clínicas que quieren dejar de depender del boca a boca y crecer con un sistema rentable, estable y medible.</p>
+      <p class="body au"><strong>Su regla es simple: el cliente siempre debe ganar más que ellos.</strong></p>
+    </div>
+    <div class="col au" style="justify-content:flex-end;">
+      <div class="img-wrap" style="margin-top:auto;"><img src="fotos/MANUEL Y JOSEP.png" style="width:100%;height:auto;border-radius:16px;display:block;"/></div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 3 — ¿ESTÁS EN BUENAS MANOS?
+════════════════════════════════════════ -->
+<div class="slide bg-gray" data-slide="3">
+  <div class="two-col">
+    <div class="col au">
+      <div class="img-wrap"><img src="fotos/Josep CID.jpeg" style="width:100%;height:520px;object-fit:cover;object-position:center 30%;border-radius:16px;display:block;"/></div>
+    </div>
+    <div class="col" style="text-align:right;align-items:flex-end;">
+      <h2 class="au">¿Estás en <span class="accent">buenas manos?</span></h2>
+      <p class="body au" style="text-align:right;max-width:500px;">
+        Josep se convirtió en el <strong>único español del mundo</strong> en alcanzar el <strong>top 1% global en Fiverr</strong> como experto en Facebook Ads, tras ayudar a más de 100 empresarios en todo el planeta.
+      </p>
+      <p class="body au" style="text-align:right;max-width:500px;">
+        Hoy, junto a Manuel, lidera un sistema de escalado para clínicas dentales en <strong>España y México</strong>, combinando estrategia, seguimiento y resultados medibles.
+      </p>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 4 — ¿QUÉ ES DENTALY?
+════════════════════════════════════════ -->
+<div class="slide bg-dark" data-slide="4">
+  <div class="qdentaly-wrap">
+    <div class="label white au">Lo que cambia todo</div>
+    <div class="qdentaly-h au">
+      <span style="color:rgba(255,255,255,.35);">Gestiona tu propio</span><br/>
+      <span style="color:#fff;">marketing dental</span><br/>
+      <span style="color:var(--blue);">en 2 clics.</span>
+    </div>
+    <p class="au" style="font-size:19px;color:rgba(255,255,255,.6);max-width:580px;line-height:1.65;">
+      Dentaly es el software. Tú lo controlas. Sin depender de nadie.
+    </p>
+    <div class="pills-row au">
+      <div class="pill pill-white"><span>📣</span> Anuncios ganadores</div>
+      <div class="pill pill-white"><span>🔀</span> Embudos</div>
+      <div class="pill pill-white"><span>🔔</span> Recordatorios</div>
+      <div class="pill pill-white"><span>📧</span> Email Marketing</div>
+      <div class="pill pill-white"><span>💬</span> Conversaciones</div>
+      <div class="pill pill-white"><span>⭐</span> Reseñas</div>
+      <div class="pill pill-white"><span>🤖</span> Avatar IA</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 5 — ANUNCIOS
+════════════════════════════════════════ -->
+<div class="slide bg-white" data-slide="5">
+  <div class="feat-layout">
+    <div class="feat-col">
+      <div class="feat-icon au">📣</div>
+      <div class="label au">Funcionalidad 1 / 7</div>
+      <h2 class="au">Anuncios: <span class="accent">Lanza y gestiona<br/>en 2 clics.</span></h2>
+      <p class="body au">Elige plataforma, selecciona plantilla, lanza. Así de simple. Ahora cualquier dueño de clínica puede hacer su propio marketing en dos clics. Meta Ads y Google Ads desde un solo panel.</p>
+      <div class="feat-list au">
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Plantillas probadas: vídeos ganadores que agendan visitas por ti</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Los mejores anuncios del sector ya incluidos</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Métricas en tiempo real desde tu panel</div></div>
+      </div>
+    </div>
+    <div class="au">
+      <!-- GHL Interface Mockup - Anuncios -->
+      <div class="ghl-window">
+        <div class="ghl-titlebar">
+          <div class="ghl-dot" style="background:#FF5F57;"></div>
+          <div class="ghl-dot" style="background:#FEBC2E;"></div>
+          <div class="ghl-dot" style="background:#28C840;"></div>
+          <div class="ghl-url">app.dentaly.io · Lanzar nueva campaña</div>
+        </div>
+        <div class="ghl-body">
+          <div class="ghl-sidebar">
+            <div style="width:28px;height:28px;background:var(--blue);border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+            <div class="ghl-side-icon">🏠</div>
+            <div class="ghl-side-icon">💬</div>
+            <div class="ghl-side-icon">📅</div>
+            <div class="ghl-side-icon">👥</div>
+            <div class="ghl-side-icon active-icon">📣</div>
+            <div class="ghl-side-icon">⚡</div>
+            <div class="ghl-side-icon">🌐</div>
+          </div>
+          <div class="ghl-content" style="background:#F8FAFC;">
+            <!-- Step indicator -->
+            <div style="display:flex;align-items:center;gap:0;margin-bottom:16px;font-size:11px;">
+              <div style="background:var(--blue);color:#fff;border-radius:100px;padding:4px 12px;font-weight:700;">1 Elige plataforma</div>
+              <div style="width:20px;height:1px;background:#D1D5DB;"></div>
+              <div style="color:var(--gray);padding:4px 12px;">2 Categoría</div>
+              <div style="width:20px;height:1px;background:#D1D5DB;"></div>
+              <div style="color:var(--gray);padding:4px 12px;">3 Plantilla</div>
+            </div>
+            <!-- Platform selector -->
+            <div style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:10px;">Elige una plataforma</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+              <div style="background:#fff;border:2px solid var(--blue);border-radius:10px;padding:14px;text-align:center;">
+                <div style="font-size:22px;margin-bottom:6px;">📘</div>
+                <div style="font-size:12px;font-weight:700;color:var(--black);">Facebook e Instagram</div>
+              </div>
+              <div style="background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:14px;text-align:center;opacity:.6;">
+                <div style="font-size:22px;margin-bottom:6px;">🔍</div>
+                <div style="font-size:12px;font-weight:700;color:var(--gray);">Google Ads</div>
+              </div>
+            </div>
+            <!-- Category grid -->
+            <div style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Selecciona categoría</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+              <div style="background:#fff;border:1px solid #E5E7EB;border-radius:8px;padding:8px;text-align:center;">
+                <div style="width:100%;height:32px;background:linear-gradient(135deg,#DBEAFE,#93C5FD);border-radius:5px;margin-bottom:5px;display:flex;align-items:center;justify-content:center;font-size:14px;">🦷</div>
+                <div style="font-size:9px;font-weight:700;color:var(--blue);">IMAGEN FIJA</div>
+                <div style="font-size:9px;color:var(--gray);">12 templates</div>
+              </div>
+              <div style="background:#fff;border:1px solid #E5E7EB;border-radius:8px;padding:8px;text-align:center;">
+                <div style="width:100%;height:32px;background:linear-gradient(135deg,#DCFCE7,#86EFAC);border-radius:5px;margin-bottom:5px;display:flex;align-items:center;justify-content:center;font-size:14px;">🎬</div>
+                <div style="font-size:9px;font-weight:700;color:var(--blue);">VIDEO</div>
+                <div style="font-size:9px;color:var(--gray);">38 templates</div>
+              </div>
+              <div style="background:var(--blue);border-radius:8px;padding:8px;text-align:center;">
+                <div style="width:100%;height:32px;background:rgba(255,255,255,.2);border-radius:5px;margin-bottom:5px;display:flex;align-items:center;justify-content:center;font-size:14px;">⭐</div>
+                <div style="font-size:9px;font-weight:700;color:#fff;">MEJORES</div>
+                <div style="font-size:9px;color:rgba(255,255,255,.7);">1 template</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 6 — EMBUDOS
+════════════════════════════════════════ -->
+<div class="slide bg-gray" data-slide="6">
+  <div class="feat-layout reverse">
+    <div class="feat-col">
+      <div class="feat-icon au">🔀</div>
+      <div class="label au">Funcionalidad 2 / 7</div>
+      <h2 class="au">Embudos: <span class="accent">Selecciona<br/>y capta.</span></h2>
+      <p class="body au">Embudos completos ya construidos para los tratamientos más rentables. Solo elige el tratamiento y publica. Punto.</p>
+      <div class="feat-list au">
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Landing pages optimizadas por tratamiento</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Confirmación automática + página de gracias</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">A/B testing integrado</div></div>
+      </div>
+    </div>
+    <div class="au">
+      <div class="ghl-window">
+        <div class="ghl-titlebar">
+          <div class="ghl-dot" style="background:#FF5F57;"></div>
+          <div class="ghl-dot" style="background:#FEBC2E;"></div>
+          <div class="ghl-dot" style="background:#28C840;"></div>
+          <div class="ghl-url">app.dentaly.io · Funnels</div>
+        </div>
+        <div class="ghl-body">
+          <div class="ghl-sidebar">
+            <div style="width:28px;height:28px;background:var(--blue);border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+            <div class="ghl-side-icon">🏠</div>
+            <div class="ghl-side-icon">💬</div>
+            <div class="ghl-side-icon active-icon">🌐</div>
+            <div class="ghl-side-icon">⚡</div>
+          </div>
+          <div class="ghl-content">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div style="font-size:14px;font-weight:700;color:var(--black);">Funnels</div>
+              <div style="background:var(--blue);color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;">+ New Funnel</div>
+            </div>
+            <div class="funnel-list">
+              <div class="funnel-row">
+                <div><div class="funnel-name">Implantes dentales</div><div class="funnel-steps">3 pasos · Actualizado hoy</div></div>
+                <div class="badge-green">ACTIVO</div>
+              </div>
+              <div class="funnel-row">
+                <div><div class="funnel-name">Ortodoncia invisible</div><div class="funnel-steps">3 pasos · Actualizado hoy</div></div>
+                <div class="badge-green">ACTIVO</div>
+              </div>
+              <div class="funnel-row">
+                <div><div class="funnel-name">Ortodoncia con brackets</div><div class="funnel-steps">3 pasos · Actualizado ayer</div></div>
+                <div class="badge-green">ACTIVO</div>
+              </div>
+              <div class="funnel-row">
+                <div><div class="funnel-name">Diseño de sonrisa</div><div class="funnel-steps">3 pasos · Actualizado ayer</div></div>
+                <div class="badge-green">ACTIVO</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 7 — RECORDATORIOS
+════════════════════════════════════════ -->
+<div class="slide bg-white" data-slide="7">
+  <div class="feat-layout">
+    <div class="feat-col">
+      <div class="feat-icon au">🔔</div>
+      <div class="label au">Funcionalidad 3 / 7</div>
+      <h2 class="au">Recordatorios: <span class="accent">Evita<br/>no asistencia.</span></h2>
+      <p class="body au">El no-show cuesta dinero. Dentaly activa automáticamente una secuencia de mensajes para que cada paciente llegue a su cita. Sin que muevas un dedo.</p>
+      <div class="feat-list au">
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Automatización 100% — sin intervención manual</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Email + WhatsApp en cada punto clave</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Reducción drástica del ratio de no-show</div></div>
+      </div>
+    </div>
+    <div class="au">
+      <!-- Workflow visual - clean timeline -->
+      <div style="background:#F8FAFC;border:1px solid #E5E7EB;border-radius:16px;padding:24px 22px;">
+        <div style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:20px;">Flujo automático de recordatorios</div>
+        <div class="wf-timeline">
+          <div class="wf-step">
+            <div class="wf-circle blue">🗓</div>
+            <div>
+              <div class="wf-title">Cita confirmada</div>
+              <div class="wf-channels">
+                <span class="wf-ch email">Email</span>
+                <span class="wf-ch wa">WhatsApp</span>
+              </div>
+              <div class="wf-desc">Confirmación inmediata al paciente</div>
+            </div>
+          </div>
+          <div class="wf-step">
+            <div class="wf-circle blue">⏰</div>
+            <div>
+              <div class="wf-title">24 horas antes</div>
+              <div class="wf-channels">
+                <span class="wf-ch email">Email</span>
+                <span class="wf-ch wa">WhatsApp</span>
+              </div>
+              <div class="wf-desc">Recordatorio con los detalles de la cita</div>
+            </div>
+          </div>
+          <div class="wf-step">
+            <div class="wf-circle blue">⚡</div>
+            <div>
+              <div class="wf-title">1 hora antes</div>
+              <div class="wf-channels">
+                <span class="wf-ch email">Email</span>
+                <span class="wf-ch wa">WhatsApp</span>
+              </div>
+              <div class="wf-desc">Último aviso antes de la cita</div>
+            </div>
+          </div>
+          <div class="wf-step" style="padding-bottom:0;">
+            <div class="wf-circle green">✓</div>
+            <div>
+              <div class="wf-title" style="color:#16A34A;">Paciente en la clínica</div>
+              <div class="wf-desc">El sistema ha hecho su trabajo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 8 — EMAIL MARKETING
+════════════════════════════════════════ -->
+<div class="slide bg-gray" data-slide="8">
+  <div class="feat-layout reverse">
+    <div class="feat-col">
+      <div class="feat-icon au">📧</div>
+      <div class="label au">Funcionalidad 4 / 7</div>
+      <h2 class="au">Email Marketing: <span class="accent">Nutre a<br/>tus leads.</span></h2>
+      <p class="body au">Un lead que no convierte hoy puede convertir en 3 meses — si lo cuidas. Dentaly lo hace por ti, automáticamente, con contenido pensado para clínicas dentales.</p>
+      <div class="feat-list au">
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Genera confianza con el lead sin esfuerzo tuyo</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Reactiva leads fríos de forma automática</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Lleva al lead hasta la cita en el momento adecuado</div></div>
+      </div>
+    </div>
+    <div class="au">
+      <div style="background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:24px 22px;display:flex;flex-direction:column;gap:16px;">
+        <div style="font-size:13px;font-weight:700;color:var(--black);">¿Cómo funciona el nurturing?</div>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:12px 16px;align-items:start;">
+          <div style="width:28px;height:28px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:800;">1</div>
+          <div><div style="font-size:14px;font-weight:700;">El lead entra al sistema</div><div style="font-size:12px;color:var(--gray);">Rellena el formulario o agenda cita</div></div>
+          <div style="width:28px;height:28px;background:#EFF6FF;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--blue);font-weight:800;">2</div>
+          <div><div style="font-size:14px;font-weight:700;">Recibe emails de valor</div><div style="font-size:12px;color:var(--gray);">Educación, testimonios, casos de éxito</div></div>
+          <div style="width:28px;height:28px;background:#EFF6FF;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--blue);font-weight:800;">3</div>
+          <div><div style="font-size:14px;font-weight:700;">Confianza aumenta</div><div style="font-size:12px;color:var(--gray);">El lead te ve como la autoridad</div></div>
+          <div style="width:28px;height:28px;background:#16A34A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:800;">✓</div>
+          <div><div style="font-size:14px;font-weight:700;color:#16A34A;">Agenda cita</div><div style="font-size:12px;color:var(--gray);">Cuando está listo, te encuentra a ti</div></div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:12px;padding:14px 16px;margin-top:4px;">
+          <div style="font-size:13px;font-weight:700;color:var(--blue);">💡 El objetivo</div>
+          <div style="font-size:13px;color:var(--blue);margin-top:4px;line-height:1.5;opacity:.85;">Que cuando el lead esté listo para decidir, piense en ti — no en la competencia.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 9 — CONVERSACIONES
+════════════════════════════════════════ -->
+<div class="slide bg-white" data-slide="9">
+  <div class="feat-layout">
+    <div class="feat-col">
+      <div class="feat-icon au">💬</div>
+      <div class="label au">Funcionalidad 5 / 7</div>
+      <h2 class="au">Conversaciones: <span class="accent">Todo<br/>aquí.</span></h2>
+      <p class="body au">SMS, WhatsApp, Instagram y email en una sola bandeja. Sin saltar entre apps. Sin perder mensajes. Todo el historial de cada paciente en un solo lugar.</p>
+      <div class="feat-list au">
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Bandeja unificada SMS + WhatsApp + Instagram + Email</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Historial completo de cada lead o paciente</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Respuestas rápidas y acciones manuales</div></div>
+      </div>
+    </div>
+    <div class="au">
+      <div class="ghl-window">
+        <div class="ghl-titlebar">
+          <div class="ghl-dot" style="background:#FF5F57;"></div>
+          <div class="ghl-dot" style="background:#FEBC2E;"></div>
+          <div class="ghl-dot" style="background:#28C840;"></div>
+          <div class="ghl-url">app.dentaly.io · Conversaciones</div>
+        </div>
+        <div class="ghl-body" style="min-height:300px;">
+          <div class="ghl-sidebar">
+            <div style="width:28px;height:28px;background:var(--blue);border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+            <div class="ghl-side-icon active-icon">💬</div>
+            <div class="ghl-side-icon">📅</div>
+            <div class="ghl-side-icon">👥</div>
+          </div>
+          <!-- Inbox list -->
+          <div style="width:160px;border-right:1px solid #E5E7EB;padding:12px;overflow:hidden;flex-shrink:0;">
+            <div style="font-size:11px;font-weight:700;color:var(--gray);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;">Bandeja</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="background:var(--blue);border-radius:8px;padding:8px 10px;">
+                <div style="font-size:11px;font-weight:700;color:#fff;">Marco M.</div>
+                <div style="font-size:10px;color:rgba(255,255,255,.7);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">¿Tienen implantes?</div>
+              </div>
+              <div style="border-radius:8px;padding:8px 10px;background:#F8FAFC;border:1px solid #E5E7EB;">
+                <div style="font-size:11px;font-weight:600;">Álvaro M.</div>
+                <div style="font-size:10px;color:var(--gray);">Certificado...</div>
+              </div>
+              <div style="border-radius:8px;padding:8px 10px;background:#F8FAFC;border:1px solid #E5E7EB;">
+                <div style="font-size:11px;font-weight:600;">Sergio C.</div>
+                <div style="font-size:10px;color:var(--gray);">Recibido on...</div>
+              </div>
+              <div style="border-radius:8px;padding:8px 10px;background:#F8FAFC;border:1px solid #E5E7EB;">
+                <div style="font-size:11px;font-weight:600;">Implantes...</div>
+                <div style="font-size:10px;color:var(--gray);">Muchas gracias</div>
+              </div>
+            </div>
+          </div>
+          <!-- Chat -->
+          <div style="flex:1;display:flex;flex-direction:column;padding:12px;gap:8px;overflow:hidden;">
+            <div style="font-size:12px;font-weight:700;color:var(--black);border-bottom:1px solid #F3F4F6;padding-bottom:8px;">Marco Moretti</div>
+            <div style="background:#EFF6FF;border-radius:10px 10px 10px 2px;padding:9px 12px;align-self:flex-start;max-width:80%;">
+              <div style="font-size:11px;color:var(--blue);">¿Tienen disponibilidad para implantes?</div>
+            </div>
+            <div style="background:var(--blue);border-radius:10px 10px 2px 10px;padding:9px 12px;align-self:flex-end;max-width:80%;">
+              <div style="font-size:11px;color:#fff;">¡Claro! Te escribo mañana.</div>
+            </div>
+            <div style="margin-top:auto;border:1px solid #E5E7EB;border-radius:8px;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;background:#fff;">
+              <div style="font-size:11px;color:var(--gray);">Mensaje...</div>
+              <div style="display:flex;gap:6px;">
+                <div style="font-size:10px;font-weight:700;color:var(--blue);">Email</div>
+                <div style="font-size:10px;font-weight:700;color:#16A34A;">WA</div>
+                <div style="font-size:10px;font-weight:700;color:var(--gray);">SMS</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 10 — RESEÑAS
+════════════════════════════════════════ -->
+<div class="slide bg-gray" data-slide="10">
+  <div class="feat-layout reverse">
+    <div class="feat-col">
+      <div class="feat-icon au">⭐</div>
+      <div class="label au">Funcionalidad 6 / 7</div>
+      <h2 class="au">Reseñas: <span class="accent">Recoge solo<br/>las buenas.</span></h2>
+      <p class="body au">Sistema inteligente que filtra reseñas antes de publicarlas. Satisfechos van a Google. Insatisfechos te llegan a ti, en privado, para gestionar.</p>
+      <div class="feat-list au">
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Filtro automático positivo / negativo</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Redirección directa a Google My Business</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Feedback negativo gestionado en privado</div></div>
+      </div>
+    </div>
+    <div class="au">
+      <div class="resenas-page">
+        <div style="font-size:32px;">⭐⭐⭐⭐⭐</div>
+        <div class="resenas-title">Cuéntanos tu opinión</div>
+        <div class="resenas-sub">¿Cómo ha sido tu experiencia en nuestra clínica?</div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:10px;">
+          <button class="resenas-btn-pos">⭐ Dejar comentario positivo</button>
+          <button class="resenas-btn-neg">Dejar comentario negativo</button>
+        </div>
+        <div class="resenas-info">
+          <div style="font-size:11px;font-weight:700;color:#B45309;margin-bottom:4px;">¿Cómo funciona el filtro?</div>
+          <div style="font-size:11px;color:#92400E;line-height:1.6;">
+            ✅ Positivo → directo a Google My Business<br/>
+            🔒 Negativo → te llega a ti en privado
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 11 — IA AVATAR
+════════════════════════════════════════ -->
+<div class="slide bg-white" data-slide="11">
+  <div class="feat-layout">
+    <div class="feat-col">
+      <div class="feat-icon au">🤖</div>
+      <div class="label au">Funcionalidad 7 / 7 · Exclusivo Dentaly</div>
+      <h2 class="au">IA: <span class="accent">Clónate y deja<br/>de grabar.</span></h2>
+      <p class="body au">Graba una vez. Tu clon IA genera vídeos de anuncios con tu cara y tu voz. Contenido ilimitado sin producción.</p>
+      <div class="feat-list au">
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Avatar IA con tu imagen y voz exactas</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Genera vídeos de anuncios en minutos</div></div>
+        <div class="feat-item"><div class="feat-check">✓</div><div class="feat-text">Exclusivo Dentaly — no existe en otro sitio</div></div>
+      </div>
+      <div style="background:#EFF6FF;border-radius:12px;padding:14px 18px;display:flex;gap:12px;align-items:center;" class="au">
+        <div style="font-size:22px;">💰</div>
+        <div style="font-size:14px;color:var(--blue);font-weight:600;">Equivale a 3.000€/año de videógrafo. Con Dentaly: incluido.</div>
+      </div>
+    </div>
+    <div class="au">
+      <video controls preload="metadata" style="width:100%;max-height:360px;border-radius:16px;display:block;background:#0F172A;">
+        <source src="fotos/JOSEP_CID_-_PRESENTACIÓN_DENTALY.mp4" type="video/mp4"/>
+      </video>
+      <div style="background:#F8FAFC;border-radius:12px;padding:14px 18px;margin-top:14px;border:1px solid #E5E7EB;">
+        <div style="font-size:12px;font-weight:700;color:var(--gray);margin-bottom:8px;">Avatar activo</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue-light),var(--blue-dark));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;">JC</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Josep Cid Ariño</div>
+            <div style="font-size:11px;color:var(--gray);">avatar estudio andorra · 1 look activo</div>
+          </div>
+          <div style="margin-left:auto;background:#DCFCE7;color:#16A34A;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:700;">ACTIVO</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 12 — CASOS INTRO
+════════════════════════════════════════ -->
+<div class="slide bg-dark" data-slide="12">
+  <div class="centered">
+    <div class="label white au">Resultados reales</div>
+    <h1 class="au white-text" style="text-align:center;font-size:clamp(44px,6vw,80px);">
+      Hemos conseguido<br/><strong style="color:var(--blue);">algunos de los casos<br/>más impresionantes</strong><br/>de la industria:
+    </h1>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 13 — CASO: BRUNO
+════════════════════════════════════════ -->
+<div class="slide bg-white" data-slide="13">
+  <div class="caso-layout">
+    <div class="caso-photo-area au">
+      <div class="img-wrap"><img src="fotos/PABLO.png" class="real-img-fixed" style="max-height:360px;width:100%;object-fit:cover;"/></div>
+    </div>
+    <div class="caso-text-area">
+      <div class="caso-name-tag au">🦷 Bruno</div>
+      <div class="au">
+        <div class="caso-result-num">x2</div>
+        <div class="caso-result-lbl">Bruno <span class="accent">duplicó</span> la<br/>facturación de su<br/>clínica</div>
+        <div class="caso-time" style="margin-top:12px;">en menos de <strong>6 meses</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 14 — CASO: MARUENDA & PÉREZ
+════════════════════════════════════════ -->
+<div class="slide bg-gray" data-slide="14">
+  <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center;width:100%;max-width:1100px;">
+    <!-- LEFT: imagen principal + resultado -->
+    <div style="display:flex;flex-direction:column;gap:22px;">
+      <div class="img-wrap au">
+        <img src="fotos/MARUENDA & PÉREZ.jpg" style="width:100%;height:260px;object-fit:cover;object-position:center 30%;border-radius:16px;display:block;"/>
+      </div>
+      <div class="au">
+        <div style="font-size:clamp(24px,2.8vw,40px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;">
+          <span style="color:var(--blue);">Clínica Maruenda &amp; Pérez<br/>facturó +180.000€ extra</span><br/>
+          en menos de <strong>12 meses</strong>
+        </div>
+      </div>
+    </div>
+    <!-- RIGHT: foto equipo -->
+    <div class="img-wrap au">
+      <img src="fotos/MARUENDA & PÉREZ 2.jpg" style="width:100%;height:auto;max-height:440px;object-fit:cover;object-position:center 30%;border-radius:16px;display:block;"/>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 15 — CASO: KATY
+════════════════════════════════════════ -->
+<div class="slide bg-white" data-slide="15">
+  <div style="display:flex;flex-direction:column;gap:22px;width:100%;max-width:1100px;">
+    <!-- Headline arriba -->
+    <div class="au" style="font-size:clamp(26px,3.2vw,48px);font-weight:900;line-height:1.05;letter-spacing:-2px;">
+      Katy <span style="color:var(--blue);">facturó +5.645€ extra</span><br/>en su clínica de Barcelona en solo <span style="color:var(--blue);">13 días</span>
+    </div>
+    <!-- 3 fotos en fila -->
+    <div style="display:grid;grid-template-columns:1fr 0.68fr 1.15fr;gap:16px;align-items:stretch;">
+      <div class="img-wrap au">
+        <img src="fotos/KATY EQUIPO.png" style="width:100%;height:310px;object-fit:cover;object-position:center 25%;border-radius:16px;display:block;"/>
+      </div>
+      <div class="img-wrap au">
+        <img src="fotos/KATY .png" style="width:100%;height:310px;object-fit:cover;object-position:center 25%;border-radius:16px;display:block;"/>
+      </div>
+      <div class="img-wrap au">
+        <img src="fotos/legrand.webp" style="width:100%;height:310px;object-fit:cover;object-position:center;border-radius:16px;display:block;"/>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 16 — CASO: PABLO
+════════════════════════════════════════ -->
+<div class="slide bg-gray" data-slide="16">
+  <div style="display:grid;grid-template-columns:1fr 0.95fr;gap:32px;align-items:center;width:100%;max-width:1100px;">
+    <!-- LEFT: foto grande + 2 pequeñas -->
+    <div style="display:flex;flex-direction:column;gap:13px;">
+      <div class="img-wrap au">
+        <img src="fotos/PABLO.png" style="width:100%;height:265px;object-fit:cover;object-position:center 25%;border-radius:16px;display:block;"/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="img-wrap au">
+          <img src="fotos/PABLO 2.jpg" style="width:100%;height:175px;object-fit:cover;object-position:center 70%;border-radius:16px;display:block;"/>
+        </div>
+        <div class="img-wrap au">
+          <img src="fotos/Cena pablo navidad.jpeg" style="width:100%;height:175px;object-fit:cover;object-position:center 30%;border-radius:16px;display:block;"/>
+        </div>
+      </div>
+    </div>
+    <!-- RIGHT: texto resultado -->
+    <div style="display:flex;flex-direction:column;gap:18px;" class="au">
+      <div class="caso-name-tag">🦷 Pablo</div>
+      <div style="font-size:clamp(24px,2.8vw,42px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;">
+        Pablo <span style="color:var(--blue);">triplicó</span> la facturación<br/>de su primera clínica<br/>en menos de <span style="color:var(--blue);">6 meses</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:10px;font-size:15px;color:var(--gray);">
+          <span style="font-size:20px;">📅</span> <strong style="color:var(--black);">2 años después</strong> — abrió su segunda clínica
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:15px;color:var(--gray);">
+          <span style="font-size:20px;">🏆</span> <strong style="color:var(--black);">4 años después</strong> — abrió su tercera clínica
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 17 — CASO: ARIEL
+════════════════════════════════════════ -->
+<div class="slide bg-white" data-slide="17">
+  <div style="display:flex;flex-direction:column;gap:22px;width:100%;max-width:1100px;">
+    <!-- Headline arriba -->
+    <div class="au" style="font-size:clamp(26px,3.2vw,48px);font-weight:900;line-height:1.05;letter-spacing:-2px;">
+      Ariel <span style="color:var(--blue);">facturó +3.055€ extra</span><br/>en solo <span style="color:var(--blue);">1 día</span> de sistema
+    </div>
+    <!-- 3 fotos en fila -->
+    <div style="display:grid;grid-template-columns:0.82fr 0.78fr 1.1fr;gap:16px;align-items:stretch;">
+      <div class="img-wrap au">
+        <img src="fotos/ARIEL.png" style="width:100%;height:320px;object-fit:cover;object-position:center 25%;border-radius:16px;display:block;"/>
+      </div>
+      <div class="img-wrap au">
+        <img src="fotos/ARIEL 2.png" style="width:100%;height:320px;object-fit:cover;object-position:center 25%;border-radius:16px;display:block;"/>
+      </div>
+      <div class="img-wrap au">
+        <img src="fotos/LOCAL ARIEL.png" style="width:100%;height:320px;object-fit:cover;object-position:center;border-radius:16px;display:block;"/>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 18 — CASO: POVEDA
+════════════════════════════════════════ -->
+<div class="slide bg-gray" data-slide="18">
+  <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center;width:100%;max-width:1100px;">
+    <!-- LEFT: clínica + resultado -->
+    <div style="display:flex;flex-direction:column;gap:22px;">
+      <div class="img-wrap au">
+        <img src="fotos/LOCAL POVEDA & MARUENDA.png" style="width:100%;height:250px;object-fit:cover;object-position:center;border-radius:16px;display:block;"/>
+      </div>
+      <div class="au">
+        <div style="font-size:clamp(24px,2.8vw,40px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;">
+          Poveda <span style="color:var(--blue);">facturó +29.560€ extra</span><br/>en menos de <strong>90 días</strong>
+        </div>
+      </div>
+    </div>
+    <!-- RIGHT: retratos -->
+    <div style="display:flex;flex-direction:column;gap:14px;" class="au">
+      <div class="img-wrap">
+        <img src="fotos/POVEDA & MARUENDA.png" style="width:100%;height:215px;object-fit:cover;object-position:center 30%;border-radius:16px;display:block;"/>
+      </div>
+      <div class="img-wrap">
+        <img src="fotos/POVEDA & MARUENDA 2.png" style="width:100%;height:215px;object-fit:cover;object-position:center 30%;border-radius:16px;display:block;"/>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 19 — CASO: ANDRÉS
+════════════════════════════════════════ -->
+<div class="slide bg-white" data-slide="19">
+  <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:20px;align-items:center;width:100%;max-width:1100px;">
+    <!-- LEFT: texto + foto pequeña -->
+    <div style="display:flex;flex-direction:column;gap:24px;" class="au">
+      <div class="caso-name-tag" style="align-self:flex-start;">🦷 Andrés · Novadental</div>
+      <div style="font-size:clamp(26px,3vw,44px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;">
+        Andrés <span style="color:var(--blue);">multiplicó x14</span><br/>su inversión<br/>en menos de <span style="color:var(--blue);">30 días</span>
+      </div>
+      <div class="img-wrap" style="max-width:260px;">
+        <img src="fotos/ANDRÉS.png" style="width:100%;height:180px;object-fit:cover;object-position:center 20%;border-radius:14px;display:block;"/>
+      </div>
+    </div>
+    <!-- RIGHT: vídeo vertical -->
+    <div class="img-wrap au" style="display:flex;justify-content:flex-start;">
+      <video controls preload="metadata" style="width:100%;max-width:300px;aspect-ratio:9/16;height:auto;max-height:520px;object-fit:cover;border-radius:16px;display:block;background:#0F172A;">
+        <source src="fotos/VIDEO CASO ÉXITO NOVADENTAL.mp4" type="video/mp4"/>
+      </video>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 20 — CASO: MARÍA VICTORIA
+════════════════════════════════════════ -->
+<div class="slide bg-gray" data-slide="20">
+  <div class="caso-layout">
+    <div class="caso-photo-area au" style="display:flex;justify-content:center;align-items:center;">
+      <video controls preload="metadata" style="width:auto;max-width:100%;max-height:520px;aspect-ratio:9/16;height:auto;object-fit:contain;border-radius:16px;display:block;background:#0F172A;">
+        <source src="fotos/MARIA VICTORIA.mp4" type="video/mp4"/>
+      </video>
+    </div>
+    <div class="caso-text-area">
+      <div class="caso-name-tag au">🦷 María Victoria — Dental Victoria</div>
+      <div class="au">
+        <div class="caso-result-num">+13.000€</div>
+        <div class="caso-result-lbl">María Victoria <span class="accent">facturó +13.000€ extra</span></div>
+        <div class="caso-time" style="margin-top:12px;">en menos de <strong>30 días</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+  SLIDE 21 — ANCLAJE DE PRECIO (TABLA)
+════════════════════════════════════════ -->
+<div class="slide bg-gray" data-slide="21">
+  <div class="slide-inner" style="align-items:center;max-width:900px;gap:14px;">
+
+    <!-- 1. TABLA: coste por separado -->
+    <div class="precio-table tres-col au">
+      <div class="precio-thead">
+        <div class="precio-th">Funcionalidad</div>
+        <div class="precio-th">Reemplaza a</div>
+        <div class="precio-th" style="background:#F3F4F6;color:#374151;">Coste por separado</div>
+      </div>
+      <div class="precio-tr"><div class="precio-td">Email marketing</div><div class="precio-td other">Mailchimp, ActiveCampaign</div><div class="precio-td other" style="color:#374151;font-weight:600;">1.200€/año</div></div>
+      <div class="precio-tr"><div class="precio-td">WhatsApp automation</div><div class="precio-td other">Twilio, ManyChat</div><div class="precio-td other" style="color:#374151;font-weight:600;">2.400€/año</div></div>
+      <div class="precio-tr"><div class="precio-td">Lanzadera de anuncios</div><div class="precio-td other">Agencia especializada</div><div class="precio-td other" style="color:#374151;font-weight:600;">12.000€/año</div></div>
+      <div class="precio-tr"><div class="precio-td">CRM / Pipeline ventas</div><div class="precio-td other">HubSpot, Salesforce</div><div class="precio-td other" style="color:#374151;font-weight:600;">1.000€/año</div></div>
+      <div class="precio-tr"><div class="precio-td">Creatividades + copies para ads</div><div class="precio-td other">Diseñador / copywriter</div><div class="precio-td other" style="color:#374151;font-weight:600;">2.000€/año</div></div>
+      <div class="precio-tr"><div class="precio-td">Agendamiento automático (sin llamadas)</div><div class="precio-td other">Calendly Pro, agenda médica</div><div class="precio-td other" style="color:#374151;font-weight:600;">1.200€/año</div></div>
+      <div class="precio-tr"><div class="precio-td">Embudos completos + diseño web</div><div class="precio-td other">ClickFunnels, diseñador web</div><div class="precio-td other" style="color:#374151;font-weight:600;">4.500€/año</div></div>
+      <div class="precio-tr"><div class="precio-td">Gestor conversaciones + integraciones</div><div class="precio-td other">HubSpot, Intercom</div><div class="precio-td other" style="color:#374151;font-weight:600;">3.400€/año</div></div>
+      <div class="precio-tr"><div class="precio-td">Filtro de reseñas</div><div class="precio-td other">Birdeye, Podium</div><div class="precio-td other" style="color:#374151;font-weight:600;">2.400€/año</div></div>
+      <div class="precio-tr"><div class="precio-td" style="font-weight:700;">Clonador IA de contenido</div><div class="precio-td other">Videógrafo / editor</div><div class="precio-td other" style="color:#374151;font-weight:600;">3.000€/año</div></div>
+    </div>
+
+    <!-- 2. TOTAL: precio por separado -->
+    <div class="au" style="width:100%;background:#F3F4F6;border:2px solid #E5E7EB;border-radius:20px;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.08em;">Sin Dentaly — 12 herramientas por separado</div>
+        <div style="font-size:13px;color:#4B5563;margin-top:4px;">Mailchimp · ManyChat · Agencia · HubSpot · ClickFunnels · Birdeye · Calendly...</div>
+      </div>
+      <div style="font-size:clamp(40px,5vw,64px);font-weight:900;letter-spacing:-2px;color:#374151;line-height:1;white-space:nowrap;">+36.000€<span style="font-size:16px;font-weight:600;">/año</span></div>
+    </div>
+
+  </div>
+  <div class="corner">
+    <div class="corner-d"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+    <div class="corner-name">Dentaly</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 22 — PRECIO FINAL
+════════════════════════════════════════ -->
+<div class="slide bg-dark" data-slide="22">
+  <div class="two-col" style="max-width:1060px;">
+    <div class="col">
+      <div class="label white au">La inversión</div>
+      <h2 class="au white-text">
+        Ahora cualquier dueño<br/>de clínica puede hacer<br/>su marketing<br/><span style="color:var(--blue);">en 2 clics.</span>
+      </h2>
+      <p class="au" style="font-size:17px;color:rgba(255,255,255,.55);max-width:440px;line-height:1.65;">Sin agencias. Sin 10 herramientas distintas. Sin costes ocultos. Todo en un solo sitio, todo el año.</p>
+      <div class="pills-row au">
+        <div class="pill" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.12);">✓ Onboarding incluido</div>
+        <div class="pill" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.12);">✓ Soporte continuo</div>
+        <div class="pill" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.12);">✓ Sin compromiso</div>
+      </div>
+    </div>
+    <div class="col au">
+      <!-- Old price — visible, que siga pesando -->
+      <div style="background:#F3F4F6;border:2px solid #E5E7EB;border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.08em;">Por separado</div>
+          <div style="font-size:13px;color:#4B5563;margin-top:2px;">12+ herramientas sueltas</div>
+        </div>
+        <div style="font-size:32px;font-weight:900;color:#374151;text-decoration:line-through;letter-spacing:-1px;">+36.000€<span style="font-size:14px;font-weight:600;">/año</span></div>
+      </div>
+      <div style="text-align:center;font-size:16px;font-weight:800;color:var(--blue);">VS.</div>
+      <!-- New price -->
+      <div style="background:var(--blue);border-radius:20px;padding:28px 28px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;">Sistema Dentaly</div>
+        <div style="font-size:clamp(48px,6vw,72px);font-weight:900;letter-spacing:-3px;line-height:1;color:#fff;">3.000€<span style="font-size:18px;font-weight:600;letter-spacing:0;">/año</span></div>
+        <div style="font-size:15px;color:rgba(255,255,255,.7);margin-top:-4px;">todo incluido, sin sorpresas</div>
+        <!-- ANUAL BADGE — importante: deja claro que NO es mensual -->
+        <div style="background:#fff;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-top:4px;">
+          <div style="font-size:22px;">✅</div>
+          <div>
+            <div style="font-size:14px;font-weight:800;color:var(--black);">Suscripción anual</div>
+            <div style="font-size:13px;color:var(--gray);margin-top:2px;">Se paga una vez al año. Sin compromiso de renovar.</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:12px 16px;text-align:center;">
+          <div style="font-size:14px;font-weight:700;color:#fff;">Ahorras más de <strong>33.000€ al año</strong> 💰</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 23 — CTA FINAL
+════════════════════════════════════════ -->
+<div class="slide bg-dark" data-slide="23">
+  <div class="cta-wrap">
+    <div class="logo-row au" style="justify-content:center;">
+      <div class="logo-d"><svg width="30" height="30" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
+      <div class="logo-name white">Dentaly</div>
+    </div>
+    <h1 class="au white-text" style="font-size:clamp(44px,6.5vw,82px);text-align:center;letter-spacing:-3px;">
+      Ahora te toca a ti<br/>escoger cuándo<br/><span style="color:var(--blue);">empezar.</span>
+    </h1>
+    <p class="au" style="font-size:18px;color:rgba(255,255,255,.55);text-align:center;max-width:500px;line-height:1.7;">
+      "El cambio empieza el día en que dejas de posponerlo."
+    </p>
+    <div class="au" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;align-items:center;">
+      <button class="cta-btn">Quiero empezar →</button>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="avatar-stack">
+          <div class="av" style="background:linear-gradient(135deg,#60A5FA,#2563EB);">JC</div>
+          <div class="av" style="background:linear-gradient(135deg,#34D399,#059669);">MT</div>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#fff;">Josep &amp; Manuel</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.4);">@app.dentaly</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /slides-wrapper -->
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn" onclick="nav(-1)">←</button>
+  <div class="nav-counter" id="nc">1 / 24</div>
+  <button class="nav-btn" onclick="nav(1)">→</button>
+</div>
+
+<script>
+const TOTAL = 23;
+let cur = 1;
+
+function getSlide(n){ return document.querySelector(`.slide[data-slide="${n}"]`); }
+
+function nav(d){
+  const next = cur + d;
+  if(next < 1 || next > TOTAL) return;
+  const cs = getSlide(cur), ns = getSlide(next);
+  cs.classList.remove('active');
+  cs.classList.add('exit');
+  setTimeout(()=>cs.classList.remove('exit'), 480);
+  ns.classList.add('active');
+  cur = next;
+  document.getElementById('nc').textContent = cur + ' / ' + TOTAL;
+  const pct = ((cur-1)/(TOTAL-1))*100;
+  document.getElementById('pb').style.width = pct + '%';
+}
+
+document.addEventListener('keydown', e=>{
+  if(['ArrowRight','ArrowDown',' '].includes(e.key)){ e.preventDefault(); nav(1); }
+  if(['ArrowLeft','ArrowUp'].includes(e.key)){ e.preventDefault(); nav(-1); }
+});
+
+// Touch
+let tx = 0;
+document.addEventListener('touchstart', e=>{ tx = e.touches[0].clientX; });
+document.addEventListener('touchend', e=>{
+  const d = tx - e.changedTouches[0].clientX;
+  if(Math.abs(d)>50) nav(d>0?1:-1);
+});
+
+// Video
+function playVideo(){
+  const v = document.getElementById('avatarVideo');
+  const ov = document.getElementById('videoOverlay');
+  const ph = document.getElementById('videoPh');
+  if(v.src && v.readyState > 0){
+    ph.style.display='none'; ov.style.display='none';
+    v.play();
+  }
+}
+</script>
+</body>
+</html>
