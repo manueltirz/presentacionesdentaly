@@ -313,7 +313,7 @@ p.body strong{color:var(--black);font-weight:700;}
 
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
-  .slide{padding:40px 32px 80px;}
+  .slide{padding:40px 32px 100px;overflow-y:auto;align-items:flex-start;}
   .two-col,.caso-layout{grid-template-columns:1fr;gap:32px;}
   .feat-layout{flex-direction:column;gap:32px;}
   .feat-layout.reverse{flex-direction:column;}
@@ -330,9 +330,23 @@ p.body strong{color:var(--black);font-weight:700;}
   .price-big{font-size:clamp(52px,9vw,88px);}
   .caso-result-num{font-size:clamp(36px,6vw,56px);}
   .caso-result-lbl{font-size:clamp(22px,3.5vw,32px);}
+  /* Inline grids 4-col → 2-col */
+  .slide [style*="repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr) !important;gap:14px !important;}
+  /* Inline grids 3-col → 2-col */
+  .slide [style*="repeat(3,1fr)"]{grid-template-columns:repeat(2,1fr) !important;gap:14px !important;}
+  /* Inline 2-col layouts (sobre nosotros, casos) → stack */
+  .slide [style*="grid-template-columns:1fr 1.05fr"],
+  .slide [style*="grid-template-columns:1.2fr 1fr"],
+  .slide [style*="grid-template-columns:1fr 0.95fr"],
+  .slide [style*="grid-template-columns:1.2fr 0.8fr"]{grid-template-columns:1fr !important;gap:24px !important;align-items:start !important;}
+  /* Inline 3-col case grids → stack */
+  .slide [style*="grid-template-columns:1fr 0.68fr 1.15fr"],
+  .slide [style*="grid-template-columns:0.82fr 0.78fr 1.1fr"]{grid-template-columns:1fr !important;gap:14px !important;}
+  /* Drop the desktop margin-top on the slide-2 right column */
+  .slide [style*="margin-top:40px"]{margin-top:0 !important;}
 }
 @media(max-width:600px){
-  .slide{padding:32px 20px 72px;}
+  .slide{padding:28px 18px 100px;}
   .stat-grid{grid-template-columns:1fr;}
   .nav{padding:8px 14px;}
   .price-big{font-size:clamp(44px,10vw,72px);}
@@ -343,6 +357,30 @@ p.body strong{color:var(--black);font-weight:700;}
   .pill{font-size:13px;padding:7px 14px;}
   .partners-row{gap:8px;}
   .partner-pill{font-size:11px;padding:5px 10px;}
+  /* Stack ALL multi-col card grids on phones */
+  .slide [style*="repeat(4,1fr)"],
+  .slide [style*="repeat(3,1fr)"]{grid-template-columns:1fr !important;gap:12px !important;}
+  /* Tighter card padding */
+  .slide [style*="padding:24px 20px"],
+  .slide [style*="padding:26px 24px"],
+  .slide [style*="padding:28px 24px"]{padding:18px 16px !important;}
+  /* Cap oversized inline image heights so they don't blow up the slide */
+  .img-wrap img[style*="height:520px"],
+  .img-wrap img[style*="height:310px"],
+  .img-wrap img[style*="height:320px"],
+  .img-wrap img[style*="height:265px"],
+  .img-wrap img[style*="height:260px"],
+  .img-wrap img[style*="height:250px"],
+  .img-wrap img[style*="height:215px"],
+  .img-wrap img[style*="height:180px"],
+  .img-wrap img[style*="height:175px"]{height:auto !important;max-height:240px !important;}
+  .portada-h{font-size:clamp(28px,8vw,46px) !important;}
+  .corner{display:none;}
+  .slide-inner{gap:16px !important;}
+  /* Slimmer feature card titles on phones */
+  .slide [style*="font-size:18px;font-weight:800"]{font-size:16px !important;}
+  /* Slimmer h2 in price slide */
+  .slide.bg-dark h2.white-text{font-size:clamp(24px,7vw,38px) !important;}
 }
 </style>
 </head>
