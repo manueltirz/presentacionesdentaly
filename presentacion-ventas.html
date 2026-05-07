@@ -314,12 +314,16 @@ p.body strong{color:var(--black);font-weight:700;}
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
   .slide{padding:40px 32px 100px;overflow-y:auto;align-items:flex-start;}
+  /* Centra el contenido si cabe; si no, lo deja arriba y permite scroll */
+  .slide > *{margin-top:auto;margin-bottom:auto;}
   .two-col,.caso-layout{grid-template-columns:1fr;gap:32px;}
   .feat-layout{flex-direction:column;gap:32px;}
   .feat-layout.reverse{flex-direction:column;}
   .stat-grid{grid-template-columns:1fr 1fr;gap:14px;}
   .calc-grid{grid-template-columns:1fr;gap:16px;}
-  .caso-photo-area{display:none;}
+  /* Mostrar fotos de casos en móvil (antes ocultas) */
+  .caso-photo-area img,.caso-photo-area .real-img-fixed{max-height:280px !important;height:auto !important;width:100%;object-fit:cover;}
+  .caso-photo-area video{max-height:320px !important;}
   .precio-table{font-size:12px;}
   .precio-thead,.precio-tr,.precio-total-row{grid-template-columns:1.8fr 1fr 1.1fr;}
   h1{font-size:clamp(34px,5vw,56px);}
@@ -352,7 +356,7 @@ p.body strong{color:var(--black);font-weight:700;}
   .price-big{font-size:clamp(44px,10vw,72px);}
   .calc-grid .calc-card:not(.featured){display:none;}
   .precio-thead,.precio-tr,.precio-total-row{grid-template-columns:1.5fr 0 1fr;}
-  .precio-th:nth-child(2),.precio-td.other,.precio-total-cell.label-cell{display:none;}
+  .precio-th:nth-child(2),.precio-tr .precio-td:nth-child(2),.precio-total-cell.label-cell{display:none;}
   .pills-row{gap:8px;}
   .pill{font-size:13px;padding:7px 14px;}
   .partners-row{gap:8px;}
@@ -1009,7 +1013,8 @@ function nav(d){
   const cs = getSlide(cur), ns = getSlide(next);
   cs.classList.remove('active');
   cs.classList.add('exit');
-  setTimeout(()=>cs.classList.remove('exit'), 480);
+  setTimeout(()=>{cs.classList.remove('exit'); cs.scrollTop = 0;}, 480);
+  ns.scrollTop = 0;
   ns.classList.add('active');
   cur = next;
   document.getElementById('nc').textContent = cur + ' / ' + TOTAL;
@@ -1022,12 +1027,16 @@ document.addEventListener('keydown', e=>{
   if(['ArrowLeft','ArrowUp'].includes(e.key)){ e.preventDefault(); nav(-1); }
 });
 
-// Touch
-let tx = 0;
-document.addEventListener('touchstart', e=>{ tx = e.touches[0].clientX; });
+// Touch — solo navega en swipe horizontal claro (no en scroll vertical)
+let tx = 0, ty = 0;
+document.addEventListener('touchstart', e=>{
+  tx = e.touches[0].clientX;
+  ty = e.touches[0].clientY;
+});
 document.addEventListener('touchend', e=>{
-  const d = tx - e.changedTouches[0].clientX;
-  if(Math.abs(d)>50) nav(d>0?1:-1);
+  const dx = tx - e.changedTouches[0].clientX;
+  const dy = ty - e.changedTouches[0].clientY;
+  if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) nav(dx>0?1:-1);
 });
 
 // Video
