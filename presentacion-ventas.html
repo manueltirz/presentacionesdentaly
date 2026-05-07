@@ -321,9 +321,9 @@ p.body strong{color:var(--black);font-weight:700;}
   .feat-layout.reverse{flex-direction:column;}
   .stat-grid{grid-template-columns:1fr 1fr;gap:14px;}
   .calc-grid{grid-template-columns:1fr;gap:16px;}
-  /* Mostrar fotos de casos en móvil (antes ocultas) */
-  .caso-photo-area img,.caso-photo-area .real-img-fixed{max-height:280px !important;height:auto !important;width:100%;object-fit:cover;}
-  .caso-photo-area video{max-height:320px !important;}
+  /* Mostrar fotos de casos en móvil (antes ocultas) — sin recortar verticales */
+  .caso-photo-area img,.caso-photo-area .real-img-fixed{max-height:380px !important;height:auto !important;width:auto !important;max-width:100% !important;object-fit:contain !important;}
+  .caso-photo-area video{max-height:360px !important;}
   .precio-table{font-size:12px;}
   .precio-thead,.precio-tr,.precio-total-row{grid-template-columns:1.8fr 1fr 1.1fr;}
   h1{font-size:clamp(34px,5vw,56px);}
@@ -644,7 +644,7 @@ p.body strong{color:var(--black);font-weight:700;}
 <div class="slide bg-white" data-slide="7">
   <div class="caso-layout">
     <div class="caso-photo-area au">
-      <div class="img-wrap"><img src="fotos/BRUNO.png" class="real-img-fixed" style="max-height:360px;width:100%;object-fit:cover;"/></div>
+      <div class="img-wrap" style="background:#fff;display:flex;justify-content:center;align-items:center;min-height:360px;"><img src="fotos/BRUNO.png" style="max-height:520px;width:auto;max-width:100%;display:block;"/></div>
     </div>
     <div class="caso-text-area">
       <div class="caso-name-tag au">🦷 Bruno</div>
