@@ -311,6 +311,27 @@ p.body strong{color:var(--black);font-weight:700;}
 .slide.active .au:nth-child(8){animation-delay:.39s;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
+/* Indicador "vivo" para la suscripción */
+.live-dot{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:#34D399;box-shadow:0 0 0 0 rgba(52,211,153,.75);
+  animation:pulseSub 1.8s ease-out infinite;
+}
+@keyframes pulseSub{
+  0%{box-shadow:0 0 0 0 rgba(52,211,153,.7);}
+  70%{box-shadow:0 0 0 10px rgba(52,211,153,0);}
+  100%{box-shadow:0 0 0 0 rgba(52,211,153,0);}
+}
+.live-label{
+  font-size:11px;font-weight:700;color:#fff;
+  text-transform:uppercase;letter-spacing:.12em;
+  animation:liveFade 2.2s ease-in-out infinite;
+}
+@keyframes liveFade{
+  0%,100%{opacity:.85;}
+  50%{opacity:1;}
+}
+
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
   .slide{padding:40px 32px 100px;overflow-y:auto;align-items:flex-start;}
@@ -942,7 +963,10 @@ p.body strong{color:var(--black);font-weight:700;}
       <div style="text-align:center;font-size:16px;font-weight:800;color:var(--blue);">VS.</div>
       <!-- New price -->
       <div style="background:var(--blue);border-radius:20px;padding:28px 28px;display:flex;flex-direction:column;gap:12px;">
-        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;">Sistema Dentaly</div>
+        <div style="display:inline-flex;align-items:center;gap:9px;">
+          <span class="live-dot"></span>
+          <span class="live-label">Suscripción</span>
+        </div>
         <div style="font-size:clamp(48px,6vw,72px);font-weight:900;letter-spacing:-3px;line-height:1;color:#fff;">3.000€<span style="font-size:18px;font-weight:600;letter-spacing:0;"> + IVA/año</span></div>
         <div style="font-size:15px;color:rgba(255,255,255,.7);margin-top:-4px;">todo incluido, sin sorpresas</div>
         <!-- ANUAL BADGE — importante: deja claro que NO es mensual -->
