@@ -363,7 +363,8 @@ p.body strong{color:var(--black);font-weight:700;}
   .slide [style*="grid-template-columns:1fr 1.05fr"],
   .slide [style*="grid-template-columns:1.2fr 1fr"],
   .slide [style*="grid-template-columns:1fr 0.95fr"],
-  .slide [style*="grid-template-columns:1.2fr 0.8fr"]{grid-template-columns:1fr !important;gap:24px !important;align-items:start !important;}
+  .slide [style*="grid-template-columns:1.2fr 0.8fr"],
+  .slide [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr !important;gap:24px !important;align-items:start !important;}
   /* Inline 3-col case grids → stack */
   .slide [style*="grid-template-columns:1fr 0.68fr 1.15fr"],
   .slide [style*="grid-template-columns:0.82fr 0.78fr 1.1fr"]{grid-template-columns:1fr !important;gap:14px !important;}
@@ -986,9 +987,59 @@ p.body strong{color:var(--black);font-weight:700;}
 </div>
 
 <!-- ════════════════════════════════════════
-  SLIDE 17 — CTA FINAL
+  SLIDE 17 — SISTEMA DE AFILIADOS
 ════════════════════════════════════════ -->
-<div class="slide bg-dark" data-slide="17">
+<div class="slide bg-blue" data-slide="17">
+  <div class="slide-inner" style="align-items:center;max-width:1100px;gap:32px;">
+    <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;max-width:780px;">
+      <div class="label au" style="color:rgba(255,255,255,.7);">Bonus · sistema de afiliados</div>
+      <h2 class="au white-text">Trae una clínica, <span style="color:#FBBF24;">cobra un 20%.</span></h2>
+      <p class="au" style="font-size:17px;color:rgba(255,255,255,.85);max-width:600px;line-height:1.6;">
+        Recomienda Dentaly a otra clínica. Por cada una que se suscriba, te llevas el <strong style="color:#fff;">20% de su cuota anual</strong>. Sin límites.
+      </p>
+    </div>
+    <div class="au affiliate-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%;align-items:stretch;">
+      <!-- LEFT: comisión hero -->
+      <div style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;justify-content:center;gap:10px;">
+        <div style="font-size:11px;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.1em;font-weight:700;">Tu comisión</div>
+        <div style="font-size:clamp(56px,8vw,92px);font-weight:900;letter-spacing:-3px;line-height:1;color:#fff;">600€<span style="font-size:18px;font-weight:600;letter-spacing:0;color:rgba(255,255,255,.7);">/año</span></div>
+        <div style="font-size:14px;color:rgba(255,255,255,.7);">por cada clínica que se suscriba</div>
+        <div style="margin-top:8px;display:inline-flex;align-items:center;gap:9px;align-self:flex-start;">
+          <span class="live-dot"></span>
+          <span class="live-label">Recurrente cada año</span>
+        </div>
+      </div>
+      <!-- RIGHT: tabla cálculo -->
+      <div style="background:#fff;border-radius:20px;padding:26px 24px;display:flex;flex-direction:column;gap:12px;color:var(--black);">
+        <div style="font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.1em;font-weight:700;">Haz números</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:#F8FAFC;border-radius:10px;font-size:14px;">
+            <span>1 clínica recomendada</span><strong style="color:var(--blue);">+600€/año</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:#F8FAFC;border-radius:10px;font-size:14px;">
+            <span>3 clínicas recomendadas</span><strong style="color:var(--blue);">+1.800€/año</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:#EFF6FF;border-radius:10px;font-size:15px;border:1px solid var(--blue);">
+            <span style="font-weight:700;">5 clínicas recomendadas</span><strong style="color:var(--blue);font-size:17px;">+3.000€/año</strong>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#16A34A;font-weight:700;background:#DCFCE7;padding:11px 14px;border-radius:10px;line-height:1.4;">
+          💰 Con 5 recomendaciones, <strong>Dentaly te sale gratis</strong>.
+        </div>
+      </div>
+    </div>
+    <div class="au pills-row" style="justify-content:center;">
+      <div class="pill pill-white">✓ Sin límite de recomendaciones</div>
+      <div class="pill pill-white">✓ Pago automático</div>
+      <div class="pill pill-white">✓ Tu enlace único de afiliado</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+  SLIDE 18 — CTA FINAL
+════════════════════════════════════════ -->
+<div class="slide bg-dark" data-slide="18">
   <div class="cta-wrap">
     <div class="logo-row au" style="justify-content:center;">
       <div class="logo-d"><svg width="30" height="30" viewBox="0 0 48 48" fill="none"><path d="M10 8H24C33.941 8 42 16.059 42 26C42 35.941 33.941 44 24 44H10V8Z" fill="white"/></svg></div>
@@ -1021,12 +1072,12 @@ p.body strong{color:var(--black);font-weight:700;}
 <!-- NAV -->
 <div class="nav">
   <button class="nav-btn" onclick="nav(-1)">←</button>
-  <div class="nav-counter" id="nc">1 / 17</div>
+  <div class="nav-counter" id="nc">1 / 18</div>
   <button class="nav-btn" onclick="nav(1)">→</button>
 </div>
 
 <script>
-const TOTAL = 17;
+const TOTAL = 18;
 let cur = 1;
 
 function getSlide(n){ return document.querySelector(`.slide[data-slide="${n}"]`); }
